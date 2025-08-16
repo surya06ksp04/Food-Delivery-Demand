@@ -1,8 +1,3 @@
-"""
-Create an interactive Folium map of zone centers colored by expected demand.
-Outputs:
-- outputs/demand_map.html
-"""
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
@@ -12,7 +7,6 @@ def main(target_hour: int = 20):
     root = Path(__file__).resolve().parents[1]
     centers = pd.read_csv(root / "data" / "zone_centers.csv")
     plan = pd.read_csv(root / "outputs" / "driver_plan.csv")
-    # pick latest date's given hour
     latest_date = plan["date"].max()
     subset = plan[(plan["date"]==latest_date) & (plan["hour"]==target_hour)]
     merged = centers.merge(subset, on="zone_id", how="left")
@@ -21,12 +15,10 @@ def main(target_hour: int = 20):
     mean_lon = merged["lon"].mean()
     m = folium.Map(location=[mean_lat, mean_lon], zoom_start=12)
 
-    # Normalize for color scale
     max_orders = merged["pred_orders"].max()
     for _, r in merged.iterrows():
         demand = float(r.get("pred_orders", 0) or 0.0)
         intensity = 0.0 if max_orders == 0 else demand / max_orders
-        # simple red gradient via RGB (intensity, 0, 0)
         color = "#{:02x}{:02x}{:02x}".format(int(intensity*255), 0, 0)
         folium.CircleMarker(
             location=[r["lat"], r["lon"]],
