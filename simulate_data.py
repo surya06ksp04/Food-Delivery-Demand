@@ -1,7 +1,3 @@
-"""
-Simulate order + weather data for a city grid.
-Generates `data/simulated_orders.csv`.
-"""
 from __future__ import annotations
 
 import numpy as np
@@ -25,7 +21,7 @@ def simulate(n_days=14, city_center=(17.441, 78.389), city_radius_km=12, n_order
                 0.9 * np.exp(-((hour-20)**2)/(2*2.5**2)) +
                 0.15
             )
-            if rng.random() > intensity:  # skip many hours
+            if rng.random() > intensity:  
                 continue
 
             # random offset within hour
