@@ -75,10 +75,5 @@ drivers = ceil( expected_orders * avg_service_time_min / 60 )
 ```
 - `avg_service_time_min` defaults to **20 min** (prep + pickup + travel); change via CLI.
 
-## Interview Talking Points
-- Built an **end-to-end pipeline** (simulation → features → model → optimization).
-- Used **time-series style** aggregations (zone-hour) and **geo clustering** for zones.
-- Delivered **actionable ops insights** (peak-hour staffing & coverage map).
-
 ## License
 MIT
