@@ -1,9 +1,3 @@
-"""
-Use trained model to predict demand & allocate drivers per zone-hour.
-Outputs:
-- outputs/peak_hours.png
-- outputs/driver_plan.csv
-"""
 from __future__ import annotations
 
 import math
@@ -32,7 +26,7 @@ def main(avg_service_time_min: float = 20.0):
     out_img = root / "outputs" / "peak_hours.png"
     out_img.parent.mkdir(parents=True, exist_ok=True)
 
-    # Plot total demand by hour averaged across days
+    # Plotting total demand by hour averaged across days
     mean_by_hour = city_hr.groupby("hour")["pred_orders"].mean()
     plt.figure(figsize=(9,5))
     mean_by_hour.plot(kind="bar")
@@ -44,7 +38,7 @@ def main(avg_service_time_min: float = 20.0):
     plt.close()
     print("Saved", out_img)
 
-    # Save driver plan
+    # Saving driver plan
     plan = agg[["zone_id","date","hour","pred_orders","drivers_needed"]]
     out_csv = root / "outputs" / "driver_plan.csv"
     plan.to_csv(out_csv, index=False)
