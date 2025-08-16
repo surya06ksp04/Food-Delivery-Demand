@@ -1,12 +1,3 @@
-"""
-Preprocess raw orders:
-- Parse timestamps
-- Build delivery zones with K-Means (if missing)
-- Aggregate to zone-hour features
-Outputs:
-- data/zone_centers.csv
-- data/zone_hour_agg.csv
-"""
 from __future__ import annotations
 import pandas as pd
 from pathlib import Path
