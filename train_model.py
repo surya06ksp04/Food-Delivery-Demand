@@ -1,7 +1,3 @@
-"""
-Train a RandomForestRegressor to predict zone-hour demand (orders count).
-Saves model to models/demand_model.pkl
-"""
 from __future__ import annotations
 
 import pandas as pd
