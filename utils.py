@@ -1,7 +1,3 @@
-"""
-Utility functions & constants used across the project.
-Edit column names here if your real dataset differs.
-"""
 from __future__ import annotations
 
 import pandas as pd
@@ -9,17 +5,16 @@ import numpy as np
 from typing import Tuple, Optional
 from sklearn.cluster import KMeans
 
-# ---- Canonical column names expected by the pipeline ----
 COLS = {
     "order_id": "order_id",
-    "timestamp": "order_ts",          # ISO datetime string
+    "timestamp": "order_ts",          
     "lat": "lat",
     "lon": "lon",
     "items": "items",
     "prep_time_min": "prep_time_min",
     "temperature_c": "temperature_c",
-    "is_rain": "is_rain",             # 0/1
-    "zone_id": "zone_id",             # optional in raw
+    "is_rain": "is_rain",            
+    "zone_id": "zone_id",             
 }
 
 def parse_ts(df: pd.DataFrame, ts_col: str = COLS["timestamp"]) -> pd.DataFrame:
@@ -27,7 +22,7 @@ def parse_ts(df: pd.DataFrame, ts_col: str = COLS["timestamp"]) -> pd.DataFrame:
     df[ts_col] = pd.to_datetime(df[ts_col])
     df["date"] = df[ts_col].dt.date
     df["hour"] = df[ts_col].dt.hour
-    df["dow"] = df[ts_col].dt.dayofweek  # 0=Mon
+    df["dow"] = df[ts_col].dt.dayofweek  
     df["is_weekend"] = (df["dow"] >= 5).astype(int)
     return df
 
@@ -38,7 +33,6 @@ def build_zones(df: pd.DataFrame, n_zones: int = 8, random_state: int = 42) -> T
     """
     df = df.copy()
     if COLS["zone_id"] in df.columns and df[COLS["zone_id"]].notna().any():
-        # Already has zones; compute centers
         centers = df.groupby(COLS["zone_id"])[[COLS["lat"], COLS["lon"]]].mean().reset_index().rename(
             columns={COLS["lat"]:"lat", COLS["lon"]:"lon"})
         return df, centers
@@ -71,7 +65,6 @@ def zone_hour_aggregate(df: pd.DataFrame) -> pd.DataFrame:
           )
           .reset_index()
     )
-    # Time features
     agg["is_peak_hour"] = agg["hour"].isin([12,13,19,20,21]).astype(int)
     agg["sin_hour"] = np.sin(2*np.pi*agg["hour"]/24)
     agg["cos_hour"] = np.cos(2*np.pi*agg["hour"]/24)
